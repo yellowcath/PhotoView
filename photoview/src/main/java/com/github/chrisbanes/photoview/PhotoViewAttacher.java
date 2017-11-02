@@ -96,6 +96,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
     private boolean mZoomEnabled = true;
     private int mScaleType = FIT_CENTER.ordinal();
     private ScaleTypeStrategy mScaleTypeStrategy;
+    private DoubleTapStrategy mDoubleTapStrategy;
 
     private OnGestureListener onGestureListener = new OnGestureListener() {
         @Override
@@ -241,7 +242,10 @@ public class PhotoViewAttacher implements View.OnTouchListener,
                     float scale = getScale();
                     float x = ev.getX();
                     float y = ev.getY();
-
+                    if (mDoubleTapStrategy != null
+                            && mDoubleTapStrategy.onDoubleTap(PhotoViewAttacher.this, scale, x, y)) {
+                        return true;
+                    }
                     if (scale < getMediumScale()) {
                         setScale(getMediumScale(), x, y, true);
                     } else if (scale >= getMediumScale() && scale < getMaximumScale()) {
@@ -851,5 +855,9 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
     public void setScaleTypeStrategy(ScaleTypeStrategy scaleTypeStrategy) {
         mScaleTypeStrategy = scaleTypeStrategy;
+    }
+
+    public void setDoubleTapStrategy(DoubleTapStrategy doubleTapStrategy) {
+        mDoubleTapStrategy = doubleTapStrategy;
     }
 }
