@@ -32,7 +32,7 @@ import android.widget.ImageView;
 public class PhotoView extends ImageView {
 
     private PhotoViewAttacher attacher;
-    private ScaleType pendingScaleType;
+    private int pendingScaleType = -1;
 
     public PhotoView(Context context) {
         this(context, null);
@@ -59,9 +59,9 @@ public class PhotoView extends ImageView {
         //via the attacher
         super.setScaleType(ScaleType.MATRIX);
         //apply the previously applied scale type
-        if (pendingScaleType != null) {
-            setScaleType(pendingScaleType);
-            pendingScaleType = null;
+        if (pendingScaleType >=0) {
+            setScaleType(getScaleType());
+            pendingScaleType = -1;
         }
     }
 
@@ -76,8 +76,7 @@ public class PhotoView extends ImageView {
         return attacher;
     }
 
-    @Override
-    public ScaleType getScaleType() {
+    public int getInnerScaleType() {
         return attacher.getScaleType();
     }
 
@@ -99,9 +98,9 @@ public class PhotoView extends ImageView {
     @Override
     public void setScaleType(ScaleType scaleType) {
         if (attacher == null) {
-            pendingScaleType = scaleType;
+            pendingScaleType = scaleType.ordinal();
         } else {
-            attacher.setScaleType(scaleType);
+            attacher.setScaleType(scaleType.ordinal());
         }
     }
 

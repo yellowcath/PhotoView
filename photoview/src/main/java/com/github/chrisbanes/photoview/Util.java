@@ -20,18 +20,18 @@ class Util {
         return imageView.getDrawable() != null;
     }
 
-    static boolean isSupportedScaleType(final ImageView.ScaleType scaleType) {
-        if (scaleType == null) {
-            return false;
-        }
-        switch (scaleType) {
-            case MATRIX:
-                throw new IllegalStateException("Matrix scale type is not supported");
+    static boolean isSupportedScaleType(final int scaleType) {
+        if(scaleType == ImageView.ScaleType.MATRIX.ordinal()){
+            throw new IllegalStateException("Matrix scale type is not supported");
         }
         return true;
     }
 
     static int getPointerIndex(int action) {
         return (action & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+    }
+
+    static ImageView.ScaleType getScaleType(int scaleType){
+        return ImageView.ScaleType.values()[scaleType];
     }
 }
