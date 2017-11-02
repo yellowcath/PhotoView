@@ -22,6 +22,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.widget.ImageView;
 
@@ -59,7 +60,7 @@ public class PhotoView extends ImageView {
         //via the attacher
         super.setScaleType(ScaleType.MATRIX);
         //apply the previously applied scale type
-        if (pendingScaleType >=0) {
+        if (pendingScaleType >= 0) {
             setScaleType(getScaleType());
             pendingScaleType = -1;
         }
@@ -76,8 +77,10 @@ public class PhotoView extends ImageView {
         return attacher;
     }
 
-    public int getInnerScaleType() {
-        return attacher.getScaleType();
+    @Override
+    public ScaleType getScaleType() {
+        ScaleType scaleType = Util.getScaleType(attacher.getScaleType());
+        return scaleType == null ? ScaleType.MATRIX : scaleType;
     }
 
     @Override
@@ -97,6 +100,10 @@ public class PhotoView extends ImageView {
 
     @Override
     public void setScaleType(ScaleType scaleType) {
+        if (scaleType == ScaleType.MATRIX) {
+            Log.e("PhotoView", "attacher not support ScaleType.MATRIX");
+            return;
+        }
         if (attacher == null) {
             pendingScaleType = scaleType.ordinal();
         } else {

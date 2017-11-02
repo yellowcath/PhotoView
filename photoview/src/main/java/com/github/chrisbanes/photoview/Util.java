@@ -32,6 +32,7 @@ class Util {
     }
 
     static ImageView.ScaleType getScaleType(int scaleType){
-        return ImageView.ScaleType.values()[scaleType];
+        ImageView.ScaleType[] values = ImageView.ScaleType.values();
+        return scaleType>=0&& scaleType<values.length?values[scaleType]:null;
     }
 }
